@@ -14,10 +14,8 @@ namespace OnlinerTest.PageObjects
 {
     class LoginPage
     {
-        private IWebDriver _driver;
-        private MainPage mainPage;       
+        private readonly IWebDriver _driver;            
         
-
         public LoginPage(IWebDriver driver)
         {
             _driver = driver;
@@ -32,21 +30,18 @@ namespace OnlinerTest.PageObjects
 
         [FindsBy(How = How.XPath, Using = "//*[@id='auth-container']//button[@type='submit']")]
         public IWebElement LoginButton;
-
+        
         [FindsBy(How = How.XPath, Using = "//*[@id='cart-desktop']")]
         public IWebElement Cart;
 
         public void LoginAsUser()
         {
-            mainPage = new MainPage(_driver);
-            mainPage.SignInLink.Click();
             UserField.SendKeys("aleksey---pobol@mail.ru");
             PasswordField.SendKeys("aleksey96");
             LoginButton.Click();
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
             wait.Until(ExpectedConditions.ElementToBeClickable(Cart));
             Assert.IsTrue(Cart.Displayed);
-
         }
 
 

@@ -14,8 +14,8 @@ namespace OnlinerTest.PageObjects
 {
     class MainPage
     {
-        private IWebDriver _driver;
-
+        private readonly IWebDriver _driver;
+        
         public MainPage(IWebDriver driver)
         {
             _driver = driver;
@@ -42,29 +42,38 @@ namespace OnlinerTest.PageObjects
         [FindsBy(How = How.XPath, Using = "//*[@class='modal-iframe']")]
         public IWebElement Frame;
 
-        [FindsBy(How = How.XPath, Using = "//*[@class='modal-iframe']")]
-        public IWebElement SelectBook;
+        [FindsBy(How = How.XPath, Using = "(//*[@class='product__details'])[1]")]
+        public IWebElement SelectBookFromList;
+
+        [FindsBy(How = How.XPath, Using = "//a[@class='button button_orange button_big offers-description__button']")]
+        public IWebElement SelectOffer;
+
+        [FindsBy(How = How.XPath, Using = "(//*[@id='product-prices-primary-positions']//*[@class='b-cell-3']//a)[1]")]
+        public IWebElement PutInCart;
+                
 
 
-        //*[@id="fast-search"]/form/input[1]
-        public void BuyMacBook()
+
+        public void GoToLoginPage()
+        {
+            SignInLink.Click();
+        }
+
+        public void SelectBook()
         {
             SearchField.SendKeys("MacBook Air 13\" 2018");
             _driver.SwitchTo().Frame(Frame);
-
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            wait.Until(ExpectedConditions.ElementToBeClickable(SelectBookFromList));
+            SelectBookFromList.Click();
+            _driver.SwitchTo().DefaultContent();
+            wait.Until(ExpectedConditions.ElementToBeClickable(SelectOffer));
+            SelectOffer.Click();
+            wait.Until(ExpectedConditions.ElementToBeClickable(PutInCart));
+            PutInCart.Click();       
         }
 
 
-
-        By.XPath("(//*[@class='product__details'])[1]")
-        driver.FindElement(By.XPath("//div[@class = 'result__item result__item_product']")).Click();
-
-
-
-        driver.SwitchTo().DefaultContent();
-
-
-
-
+        
     }
 }

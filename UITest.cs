@@ -16,6 +16,8 @@ namespace OnlinerTest
         private IWebDriver _driver;
         private MainPage mainPage;
         private LoginPage loginPage;
+        private CartPage cartPage;
+        
 
         [SetUp]
         public void SetUpTest ()
@@ -25,6 +27,8 @@ namespace OnlinerTest
             _driver.Manage().Window.Maximize();
             mainPage = new MainPage(_driver);
             loginPage = new LoginPage(_driver);
+            cartPage = new CartPage(_driver);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
 
         [Test]
@@ -36,7 +40,17 @@ namespace OnlinerTest
         [Test]
         public void LoginAsUser()
         {
+            mainPage.GoToLoginPage();
             loginPage.LoginAsUser();
+        }
+
+        [Test]
+        public void BuyMackBook()
+        {
+            mainPage.GoToLoginPage();
+            loginPage.LoginAsUser();
+            mainPage.SelectBook();            
+            cartPage.OrderRegistration();
         }
 
 
