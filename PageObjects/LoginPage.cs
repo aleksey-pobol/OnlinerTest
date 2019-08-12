@@ -36,7 +36,7 @@ namespace OnlinerTest.PageObjects
 
         public void LoginAsUser()
         {
-            UserField.SendKeys("aleksey---pobol@mail.ru");
+            UserField.SendKeys("aker.aker@mail.ru");
             PasswordField.SendKeys("aleksey96");
             LoginButton.Click();
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));

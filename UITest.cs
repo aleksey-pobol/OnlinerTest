@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OnlinerTest.PageObjects;
+using System.Threading;
 
 namespace OnlinerTest
 {
@@ -17,10 +18,10 @@ namespace OnlinerTest
         private MainPage mainPage;
         private LoginPage loginPage;
         private CartPage cartPage;
-        
+
 
         [SetUp]
-        public void SetUpTest ()
+        public void SetUpTest()
         {
             _driver = new ChromeDriver();
             _driver.Navigate().GoToUrl("https://www.onliner.by/");
@@ -49,11 +50,22 @@ namespace OnlinerTest
         {
             mainPage.GoToLoginPage();
             loginPage.LoginAsUser();
-            mainPage.SelectBook();            
+            mainPage.SelectBook();
             cartPage.OrderRegistration();
         }
 
-
+        [Test]
+        public void LeaveAComment()
+        {
+            mainPage.GoToLoginPage();
+            loginPage.LoginAsUser();
+            mainPage.ScrollPageToRealty();
+            mainPage.OpenFirstNewsAndLeaveaAComment();
+            Thread.Sleep(3000);
+            //Закомментил нажатия на кнопку "Высказаться" чтобы не плодить комменты , лайк ставится на существующий коммент
+            mainPage.DefineACommentAndLike();
+            Thread.Sleep(3000);
+        }
 
         [TearDown]
         public void TearDownTest()

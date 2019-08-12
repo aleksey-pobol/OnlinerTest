@@ -1,0 +1,5 @@
+<Playlist Version="1.0">
+<Add Test="OnlinerTest.OnlinerTest.UITest.OpenSiteAndCheckTitle" />
+<Add Test="OnlinerTest.OnlinerTest.UITest.LoginAsUser" />
+<Add Test="OnlinerTest.OnlinerTest.UITest.BuyMackBook" />
+</Playlist>

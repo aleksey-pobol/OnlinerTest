@@ -9,19 +9,20 @@ using NUnit.Framework;
 using OpenQA.Selenium.Support.PageObjects;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Interactions;
 
 namespace OnlinerTest.PageObjects
 {
     class MainPage
     {
-        private readonly IWebDriver _driver;
-        
+        private readonly IWebDriver _driver;        
+
         public MainPage(IWebDriver driver)
         {
             _driver = driver;
             PageFactory.InitElements(_driver, this);
         }
-        
+
         public String GetPageTitle()
         {
             return _driver.Title;
@@ -32,7 +33,7 @@ namespace OnlinerTest.PageObjects
             String titleActual = GetPageTitle();
             Assert.AreEqual(titleExpected, titleActual);
         }
-        
+
         [FindsBy(How = How.XPath, Using = "//*[@id='userbar']//div[@class='auth-bar__item auth-bar__item--text']")]
         public IWebElement SignInLink;
 
@@ -50,9 +51,6 @@ namespace OnlinerTest.PageObjects
 
         [FindsBy(How = How.XPath, Using = "(//*[@id='product-prices-primary-positions']//*[@class='b-cell-3']//a)[1]")]
         public IWebElement PutInCart;
-                
-
-
 
         public void GoToLoginPage()
         {
@@ -63,17 +61,51 @@ namespace OnlinerTest.PageObjects
         {
             SearchField.SendKeys("MacBook Air 13\" 2018");
             _driver.SwitchTo().Frame(Frame);
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementToBeClickable(SelectBookFromList));
             SelectBookFromList.Click();
             _driver.SwitchTo().DefaultContent();
-            wait.Until(ExpectedConditions.ElementToBeClickable(SelectOffer));
             SelectOffer.Click();
-            wait.Until(ExpectedConditions.ElementToBeClickable(PutInCart));
-            PutInCart.Click();       
+            PutInCart.Click();
+        }
+
+        [FindsBy(How = How.XPath, Using = "//h2//a[contains(text(),'Недвижимость')]")]
+        public IWebElement realty;
+
+        public void ScrollPageToRealty()
+        {
+            Actions actions = new Actions(_driver);
+            actions.MoveToElement(realty).Perform();
+
+        }
+
+        [FindsBy(How = How.XPath, Using = "//*[@class='g-middle-i']/*[contains(@class, 'b-main-page-news-2')][5]//ul[contains(@class, 'b-teasers-2')]/li[1]")]
+        public IWebElement FirstNews;
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='comments-list']//div[@class='news-form']")]
+        public IWebElement comments;
+
+        [FindsBy(How = How.XPath, Using = "(//*[@class='news-form__field']//textarea)[1]")]
+        public IWebElement commentField;
+
+        [FindsBy(How = How.XPath, Using = "(//*[@class='news-form__control-flex']//a[@class])[1]")]
+        public IWebElement buttonComment;
+
+        public void OpenFirstNewsAndLeaveaAComment()
+        {
+            Actions actions = new Actions(_driver);
+            FirstNews.Click();
+            actions.MoveToElement(comments).Perform();
+            commentField.SendKeys("Хорошая статья");                     
+            //buttonComment.Click();
+        }
+
+        [FindsBy(How = How.XPath, Using = "//div[@id='comments']//*[contains(text(),'Хорошая статья')]/../../..//a[contains(@class, 'up')]")]
+        public IWebElement myComment;        
+
+        public void DefineACommentAndLike()
+        {
+            myComment.Click();
         }
 
 
-        
     }
 }
